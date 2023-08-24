@@ -18,6 +18,8 @@ public class dashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+
+
         TextView cart = findViewById(R.id.cart);
 
 
