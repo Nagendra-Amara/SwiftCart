@@ -19,5 +19,7 @@ public class cart extends AppCompatActivity {
         if(getSupportActionBar() != null)
             getSupportActionBar().hide();
 
+        TextView cartid = findViewById(R.id.cartid);
+        cartid.setText(dashboard.getCartId());
     }
 }
