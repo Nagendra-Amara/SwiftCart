@@ -1,12 +1,10 @@
 package com.example.swiftcart;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import androidx.appcompat.app.AppCompatActivity;
+//import com.pusher.pushnotifications.PushNotifications;
 
 public class cart extends AppCompatActivity {
 
@@ -21,5 +19,10 @@ public class cart extends AppCompatActivity {
 
         TextView cartid = findViewById(R.id.cartid);
         cartid.setText(dashboard.getCartId());
+
+
+
+
     }
 }
+

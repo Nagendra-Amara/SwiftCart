@@ -29,6 +29,7 @@ public class dashboard extends AppCompatActivity {
         Button logout = findViewById(R.id.logout);
         FirebaseUser user = mAuth.getCurrentUser();
         Button start = findViewById(R.id.start);
+        Button extracart = findViewById(R.id.extracart);
 
         if(getSupportActionBar()!=null)
             getSupportActionBar().hide();
@@ -46,6 +47,8 @@ public class dashboard extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+
 
         cart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +88,7 @@ public class dashboard extends AppCompatActivity {
     public static String getCartId(){
         return cartid;
     }
+
 
 
 
