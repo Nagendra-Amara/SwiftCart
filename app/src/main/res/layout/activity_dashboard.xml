@@ -98,6 +98,14 @@
                 android:layout_height="match_parent"
                 android:numColumns="2"/>
 
+
+            <Button
+                android:id="@+id/logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="logout"
+                android:textSize="15dp" />
+
         </LinearLayout>
 
     </ScrollView>

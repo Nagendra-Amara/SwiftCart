@@ -40,7 +40,7 @@ public class dashboard extends AppCompatActivity {
 
         TextView cart = findViewById(R.id.cart);
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        //Button logout = findViewById(R.id.logout);
+        Button logout = findViewById(R.id.logout);
         FirebaseUser user = mAuth.getCurrentUser();
         Button start = findViewById(R.id.start);
         Button extracart = findViewById(R.id.extracart);
@@ -61,14 +61,14 @@ public class dashboard extends AppCompatActivity {
         loadDatainGridView();
 
 
-//        logout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FirebaseAuth.getInstance().signOut();
-//                Intent i = new Intent(getApplicationContext(),MainActivity.class);
-//                startActivity(i);
-//            }
-//        });
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(i);
+            }
+        });
 
 
 
