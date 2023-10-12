@@ -12,17 +12,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.ktx.Firebase;
 
 import org.w3c.dom.Text;
 
+import java.util.HashMap;
+
 public class signup extends AppCompatActivity {
 
     FirebaseAuth mAuth;
+    FirebaseFirestore db;
 
     @Override
     public void onStart() {
@@ -49,15 +56,17 @@ public class signup extends AppCompatActivity {
         Button signup = findViewById(R.id.signup);
         TextView signuptologin = findViewById(R.id.signuptologin);
         ProgressBar progressBar = findViewById(R.id.progressBar);
-
+        TextView name = (TextView) findViewById(R.id.name);
+        db =  FirebaseFirestore.getInstance();
 
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
-                String email1,password1;
+                String email1,password1,name1;
                 email1 = String.valueOf(email.getText());
                 password1 = String.valueOf(password.getText());
+                name1 = String.valueOf(name.getText());
 
 
                 mAuth.createUserWithEmailAndPassword(email1, password1)
@@ -75,7 +84,26 @@ public class signup extends AppCompatActivity {
                                 }
                             }
                         });
+                HashMap<String, String> data = new HashMap<>();
+                data.put("name",name1);
+                data.put("email",email1);
 
+                db.collection("users")
+                        .add(data)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Toast.makeText(signup.this, "SignUp Successful.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(signup.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
 

@@ -1,6 +1,7 @@
 package com.example.swiftcart;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,50 +19,43 @@ import java.util.ArrayList;
 
 public class CoursesGVAdapter extends ArrayAdapter<DataModal> {
 
-    // constructor for our list view adapter.
-    public CoursesGVAdapter(@NonNull Context context, ArrayList<DataModal> dataModalArrayList) {
-        super(context, 0, dataModalArrayList);
-    }
 
-    @NonNull
-    @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+	public CoursesGVAdapter(@NonNull Context context, ArrayList<DataModal> dataModalArrayList) {
+		super(context, 0, dataModalArrayList);
+	}
 
-        // below line is use to inflate the
-        // layout for our item of list view.
-        View listitemView = convertView;
-        if (listitemView == null) {
-            listitemView = LayoutInflater.from(getContext()).inflate(R.layout.image_gv_item, parent, false);
-        }
+	@NonNull
+	@Override
+	public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        // after inflating an item of listview item
-        // we are getting data from array list inside
-        // our modal class.
-        DataModal dataModal = getItem(position);
 
-        // initializing our UI components of list view item.
-        TextView nameTV = listitemView.findViewById(R.id.idTVtext);
-        ImageView courseIV = listitemView.findViewById(R.id.idIVimage);
+		View listitemView = convertView;
+		if (listitemView == null) {
+			listitemView = LayoutInflater.from(getContext()).inflate(R.layout.image_gv_item, parent, false);
+		}
+		
 
-        // after initializing our items we are
-        // setting data to our view.
-        // below line is use to set data to our text view.
-        nameTV.setText(dataModal.getName());
+		DataModal dataModal = getItem(position);
+		
 
-        // in below line we are using Picasso to load image
-        // from URL in our Image VIew.
-        Picasso.get().load(dataModal.getImgUrl()).into(courseIV);
+		TextView nameTV = listitemView.findViewById(R.id.itemname);
+		ImageView courseIV = listitemView.findViewById(R.id.itemimg);
+		
 
-        // below line is use to add item
-        // click listener for our item of list view.
-        listitemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // on the item click on our list view.
-                // we are displaying a toast message.
-                Toast.makeText(getContext(), "Item clicked is : " + dataModal.getName(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        return listitemView;
-    }
+		nameTV.setText(dataModal.getName());
+		
+
+		Picasso.get().load(dataModal.getImgUrl()).into(courseIV);
+
+
+		listitemView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				Toast.makeText(getContext(), "Item clicked is : " + dataModal.getName(), Toast.LENGTH_SHORT).show();
+
+			}
+		});
+		return listitemView;
+	}
 }
