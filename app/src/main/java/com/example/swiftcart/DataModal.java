@@ -5,7 +5,7 @@ public class DataModal {
     // variables for storing our image and name.
     private String name;
     private String imgUrl;
-    private String price;
+
 
     public DataModal() {
         // empty constructor required for firebase.
@@ -15,6 +15,7 @@ public class DataModal {
     public DataModal(String name, String imgUrl) {
         this.name = name;
         this.imgUrl = imgUrl;
+
     }
 
 
@@ -23,17 +24,12 @@ public class DataModal {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+
 
     public String getImgUrl() {
         return imgUrl;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
-    }
 
 
 }
