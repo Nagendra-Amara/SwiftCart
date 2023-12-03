@@ -35,7 +35,7 @@ public class cart extends AppCompatActivity {
     static int size = 0;
     static int temp = 0;
     cartitems adapter;
-    static long totalPrice = 0;
+    long totalPrice = 0;
     Button total;
 
     @Override
@@ -62,7 +62,7 @@ public class cart extends AppCompatActivity {
     }
     public void context(){
         loadcartitems();
-        refresh(10000);
+        refresh(1000);
     }
 
     private void refresh(int ms){
@@ -96,6 +96,7 @@ public class cart extends AppCompatActivity {
                             if(size == 0)
                             {
                                 cartlistitems.setAdapter(adapter);
+                                totalPrice = 0;
                                 String temp1 = Long.toString(calculateTotal(dataModalArrayList));
                                 total.setText("Checkout and Total  " + temp1);
                             }
@@ -103,6 +104,7 @@ public class cart extends AppCompatActivity {
                             {
                                 cartlistitems.setAdapter(null);
                                 cartlistitems.setAdapter(adapter);
+                                totalPrice = 0;
                                 String temp1 = Long.toString(calculateTotal(dataModalArrayList));
                                 total.setText("Checkout and Total  " + temp1);
                                 temp = size;
@@ -124,7 +126,7 @@ public class cart extends AppCompatActivity {
                 });
     }
     private long calculateTotal(ArrayList<DataModal> dataModalArrayList){
-        totalPrice = 0;
+
         for(DataModal dataModal:dataModalArrayList){
             db.collection("prices")
                     .whereEqualTo("name", dataModal.getName())
@@ -135,7 +137,7 @@ public class cart extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     Map<String,Object> map= document.getData();
-                                    if(map.get("price") != null) totalPrice = Integer.parseInt((String) map.get("price"));
+                                    totalPrice += Long.parseLong((String) map.get("price"));
                                 }
                             }
                         }
