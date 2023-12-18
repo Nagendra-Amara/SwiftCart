@@ -1,41 +1,40 @@
 package com.example.swiftcart;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.activity.result.ActivityResultLauncher;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.support.annotation.NonNull;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 public class dashboard extends AppCompatActivity {
 
-    static String cartid;
-
+    static String cartid,email;
     GridView coursesGV;
     ArrayList<DataModal> dataModalArrayList;
     FirebaseFirestore db;
     TextView greetings;
+    FirebaseUser user;
+    boolean status = true;
+    FirebaseDatabase database;
+    DatabaseReference myRef;
 
 
 
@@ -46,12 +45,18 @@ public class dashboard extends AppCompatActivity {
 
 
 
+        //gets instance of firebase
+        database = FirebaseDatabase.getInstance();
+        
+
+
+
         TextView cart = findViewById(R.id.cart);
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         Button logout = findViewById(R.id.logout);
-        FirebaseUser user = mAuth.getCurrentUser();
+        user = mAuth.getCurrentUser();
         Button start = findViewById(R.id.start);
-        Button extracart = findViewById(R.id.extracart);
+        //Button extracart = findViewById(R.id.extracart);
         greetings = findViewById(R.id.greetings);
         coursesGV = findViewById(R.id.idGVCourses);
         dataModalArrayList = new ArrayList<>();
@@ -72,21 +77,18 @@ public class dashboard extends AppCompatActivity {
             startActivity(i);
         }
         else{
-            String email = user.getEmail();
+            email = user.getEmail();
             db.collection("users")
                     .whereEqualTo("email", email)
                     .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Map<String,Object> map= document.getData();
-                                    String name = "Hi ,"+map.get("name");
-                                    for(int i=name.length();i<25;i++)
-                                        name = name+" ";
-                                    greetings.setText(name);
-                                }
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String,Object> map= document.getData();
+                                StringBuilder name = new StringBuilder("Hi ," + map.get("name"));
+                                for(int i=name.length();i<25;i++)
+                                    name.append(" ");
+                                greetings.setText(name.toString());
                             }
                         }
                     });
@@ -94,37 +96,20 @@ public class dashboard extends AppCompatActivity {
 
 
 
-
-
-
-
-
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                Intent i = new Intent(getApplicationContext(),MainActivity.class);
-                startActivity(i);
-            }
+        logout.setOnClickListener(view -> {
+            FirebaseAuth.getInstance().signOut();
+            Intent i = new Intent(getApplicationContext(),MainActivity.class);
+            startActivity(i);
         });
 
 
 
-        cart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),cart.class);
-                startActivity(i);
-            }
+        cart.setOnClickListener(view -> {
+            Intent i = new Intent(getApplicationContext(),cart.class);
+            startActivity(i);
         });
 
-       start.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               scanCode();
-           }
-       });
-
+       start.setOnClickListener(view -> scanCode());
 
     }
 
@@ -141,9 +126,30 @@ public class dashboard extends AppCompatActivity {
         if(result.getContents() != null)
         {
             cartid = result.getContents();
-            Intent i = new Intent(getApplicationContext(),cart.class);
-            startActivity(i);
-            Toast.makeText(this, "Cart Registered Successfully", Toast.LENGTH_SHORT).show();
+            myRef = database.getReference("customers");
+
+            myRef.child(cartid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        status = false;
+                    } else {
+                        myRef = database.getReference("customers/"+cartid);
+                        myRef.setValue(email);
+                        Intent i = new Intent(getApplicationContext(), cart.class);
+                        startActivity(i);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    status = false;
+                }
+            });
+            
+            if(!status) {
+                Toast.makeText(this, "Something went wrong or please find another cart", Toast.LENGTH_SHORT).show();
+            }
         }
     });
 
@@ -155,32 +161,25 @@ public class dashboard extends AppCompatActivity {
     private void loadDatainGridView() {
 
         db.collection("Data").get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-                            for (DocumentSnapshot d : list) {
-                                DataModal dataModal = d.toObject(DataModal.class);
-                                dataModalArrayList.add(dataModal);
-                            }
-
-                            CoursesGVAdapter adapter = new CoursesGVAdapter(dashboard.this, dataModalArrayList);
-
-
-                            coursesGV.setAdapter(adapter);
-                        } else {
-
-                            Toast.makeText(dashboard.this, "No data found in Database", Toast.LENGTH_SHORT).show();
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                        for (DocumentSnapshot d : list) {
+                            DataModal dataModal = d.toObject(DataModal.class);
+                            dataModalArrayList.add(dataModal);
                         }
+
+                        CoursesGVAdapter adapter = new CoursesGVAdapter(dashboard.this, dataModalArrayList);
+
+
+                        coursesGV.setAdapter(adapter);
+                    } else {
+
+                        Toast.makeText(dashboard.this, "No data found in Database", Toast.LENGTH_SHORT).show();
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // we are displaying a toast message
-                        // when we get any error from Firebase.
-                        Toast.makeText(dashboard.this, "Fail to load data..", Toast.LENGTH_SHORT).show();
-                    }
+                }).addOnFailureListener(e -> {
+
+                    Toast.makeText(dashboard.this, "Fail to load data..", Toast.LENGTH_SHORT).show();
                 });
     }
 

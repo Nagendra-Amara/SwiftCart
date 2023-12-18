@@ -21,6 +21,14 @@
             android:gravity="center"
             android:id="@+id/total"
             android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/qr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Generate Qr" />
+
+
     </LinearLayout>
 </ScrollView>
 

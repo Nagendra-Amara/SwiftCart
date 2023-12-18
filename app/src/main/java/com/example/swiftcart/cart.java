@@ -1,8 +1,10 @@
 package com.example.swiftcart;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.os.Handler;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -26,33 +28,46 @@ import java.util.*;
 
 
 
-public class cart extends AppCompatActivity {
+public class cart extends AppCompatActivity  {
 
 
     ListView cartlistitems;
     FirebaseFirestore db;
     ArrayList<DataModal> dataModalArrayList;
-    static int size = 0;
-    static int temp = 0;
+    int size = 0;
+    int temp = 0;
     cartitems adapter;
-    long totalPrice = 0;
-    Button total;
+    int totalPrice;
+    static Button total;
+    String cartid;
+    HashMap<String,String> prices;
+    Button qr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
-
+        cartid = dashboard.getCartId();
 
         if(getSupportActionBar() != null)
-            getSupportActionBar().setTitle(dashboard.getCartId());
+            getSupportActionBar().setTitle(cartid);
 
 
         total = findViewById(R.id.total);
         cartlistitems = findViewById(R.id.cartlistitems);
         db = FirebaseFirestore.getInstance();
         dataModalArrayList = new ArrayList<>();
+        qr = findViewById(R.id.qr);
 
+
+
+        qr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(),checkout.class);
+                startActivity(i);
+            }
+        });
 
         context();
 
@@ -67,12 +82,14 @@ public class cart extends AppCompatActivity {
 
     private void refresh(int ms){
         final Handler handler = new Handler();
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                context();
-            }
-        };
+//        final Runnable runnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                context();
+//            }
+//        };
+        final Runnable runnable = () -> context();
+//        final Runnable runnable = this::context;
         handler.postDelayed(runnable,ms);
     }
 
@@ -96,24 +113,22 @@ public class cart extends AppCompatActivity {
                             if(size == 0)
                             {
                                 cartlistitems.setAdapter(adapter);
-                                totalPrice = 0;
-                                String temp1 = Long.toString(calculateTotal(dataModalArrayList));
-                                total.setText("Checkout and Total  " + temp1);
+                                String temp1 = Integer.toString(calculateTotal(dataModalArrayList));
+                                total.setText(temp1);
                             }
                             if(temp != size)
                             {
                                 cartlistitems.setAdapter(null);
                                 cartlistitems.setAdapter(adapter);
-                                totalPrice = 0;
-                                String temp1 = Long.toString(calculateTotal(dataModalArrayList));
-                                total.setText("Checkout and Total  " + temp1);
+                                String temp1 = Integer.toString(calculateTotal(dataModalArrayList));
+                                total.setText(temp1);
                                 temp = size;
                             }
 
 
                         } else {
-
-                            Toast.makeText(cart.this, "No data found in Database", Toast.LENGTH_SHORT).show();
+//
+//                            Toast.makeText(cart.this, "No data found in Database", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -125,25 +140,20 @@ public class cart extends AppCompatActivity {
                     }
                 });
     }
-    private long calculateTotal(ArrayList<DataModal> dataModalArrayList){
-
-        for(DataModal dataModal:dataModalArrayList){
-            db.collection("prices")
-                    .whereEqualTo("name", dataModal.getName())
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Map<String,Object> map= document.getData();
-                                    totalPrice += Long.parseLong((String) map.get("price"));
-                                }
-                            }
-                        }
-                    });
+    private int calculateTotal(ArrayList<DataModal> dataModalArrayList){
+        totalPrice = 0;
+        prices = cartitems.prices;
+        for(DataModal dataModal:dataModalArrayList)
+        {
+            if(prices.containsKey(dataModal.getName()) && prices.get(dataModal.getName()) != null)
+                totalPrice += Integer.parseInt(prices.get(dataModal.getName()));
         }
         return totalPrice;
+    }
+
+
+    public static String getTotal() {
+        return total.getText().toString();
     }
 
 }

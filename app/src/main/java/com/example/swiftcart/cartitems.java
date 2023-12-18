@@ -20,12 +20,15 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class cartitems extends ArrayAdapter<DataModal>
 {
 
     FirebaseFirestore db;
+    public static HashMap<String,String> prices = new HashMap<>();
+
 
     public cartitems(@NonNull Context context, ArrayList<DataModal> dataModalArrayList) {
         super(context, 0, dataModalArrayList);
@@ -63,6 +66,7 @@ public class cartitems extends ArrayAdapter<DataModal>
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Map<String,Object> map= document.getData();
                                 price.setText((String)map.get("price"));
+                                prices.put(dataModal.getName(),(String)price.getText());
                             }
                         }
                     }
@@ -74,7 +78,8 @@ public class cartitems extends ArrayAdapter<DataModal>
 
         return listitemView;
     }
+    public HashMap<String,String> getPrices() {
 
-
-
+        return prices;
+    }
 }
