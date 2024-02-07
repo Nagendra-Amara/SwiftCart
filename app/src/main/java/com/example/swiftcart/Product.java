@@ -2,28 +2,29 @@ package com.example.swiftcart;
 
 public class Product {
 
-    private String pro;
-    private int price;
+    private String imgUrl;
+    private String name;
 
-    public String getPro() {
-        return pro;
+
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setPro(String pro) {
-        this.pro = pro;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
-    public int getPrice() {
-        return price;
+    public String getName() {
+        return name;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Product(String pro, int price) {
-        this.pro = pro;
-        this.price = price;
+    public Product(String imgUrl, String name) {
+        this.imgUrl = imgUrl;
+        this.name = name;
     }
 }
 

@@ -51,9 +51,10 @@
             android:layout_gravity="right"
             android:layout_marginTop="80dp"
             android:layout_marginBottom="20dp"
-            android:text="Qnt:  1     "
+            android:text="Qnt:  "
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:id="@+id/qnt"/>
     </androidx.cardview.widget.CardView>
 
 
