@@ -5,6 +5,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -136,6 +137,8 @@ public class dashboard extends AppCompatActivity {
                     } else {
                         myRef = database.getReference("customers/"+cartid);
                         myRef.setValue(email);
+                        CollectionReference ref = db.collection(cartid);
+                        ref.add(new Product("Kitkat",10));
                         Intent i = new Intent(getApplicationContext(), cart.class);
                         startActivity(i);
                     }
