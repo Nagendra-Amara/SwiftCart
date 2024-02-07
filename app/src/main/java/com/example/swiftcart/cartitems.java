@@ -19,6 +19,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +30,7 @@ public class cartitems extends ArrayAdapter<DataModal>
 
     FirebaseFirestore db;
     public static HashMap<String,String> prices = new HashMap<>();
+    HashMap<String,Integer> itemqnt = new HashMap<>();
 
 
     public cartitems(@NonNull Context context, ArrayList<DataModal> dataModalArrayList) {
@@ -53,6 +56,7 @@ public class cartitems extends ArrayAdapter<DataModal>
         TextView price = listitemView.findViewById(R.id.price);
 
 
+
         itemname.setText(dataModal.getName());
 
         db = FirebaseFirestore.getInstance();
@@ -66,20 +70,18 @@ public class cartitems extends ArrayAdapter<DataModal>
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Map<String,Object> map= document.getData();
                                 price.setText((String)map.get("price"));
+                                itemqnt.put(dataModal.getName(),itemqnt.getOrDefault(dataModal.getName(),0)+1);
                                 prices.put(dataModal.getName(),(String)price.getText());
                             }
                         }
                     }
                 });
+        //qnt.setText("Qnt :"+Integer.toString(itemqnt.get(dataModal.getName())));
         Picasso.get().load(dataModal.getImgUrl()).into(img);
 
         
 
 
         return listitemView;
-    }
-    public HashMap<String,String> getPrices() {
-
-        return prices;
     }
 }

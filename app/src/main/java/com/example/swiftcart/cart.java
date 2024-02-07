@@ -43,6 +43,7 @@ public class cart extends AppCompatActivity  {
     HashMap<String,String> prices;
     Button qr;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,18 +107,17 @@ public class cart extends AppCompatActivity  {
                             for (DocumentSnapshot d : list) {
                                 DataModal dataModal = d.toObject(DataModal.class);
                                 dataModalArrayList.add(dataModal);
+
                             }
 
                             adapter = new cartitems(cart.this, dataModalArrayList);
                             size = dataModalArrayList.size();
-                            if(size == 0)
-                            {
+                            if (size == 0) {
                                 cartlistitems.setAdapter(adapter);
                                 String temp1 = Integer.toString(calculateTotal(dataModalArrayList));
                                 total.setText(temp1);
                             }
-                            if(temp != size)
-                            {
+                            if (temp != size) {
                                 cartlistitems.setAdapter(null);
                                 cartlistitems.setAdapter(adapter);
                                 String temp1 = Integer.toString(calculateTotal(dataModalArrayList));
@@ -125,17 +125,12 @@ public class cart extends AppCompatActivity  {
                                 temp = size;
                             }
 
-
-                        } else {
-//
-//                            Toast.makeText(cart.this, "No data found in Database", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        // we are displaying a toast message
-                        // when we get any error from Firebase.
+
                         Toast.makeText(cart.this, "Fail to load data..", Toast.LENGTH_SHORT).show();
                     }
                 });

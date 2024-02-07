@@ -138,7 +138,7 @@ public class dashboard extends AppCompatActivity {
                         myRef = database.getReference("customers/"+cartid);
                         myRef.setValue(email);
                         CollectionReference ref = db.collection(cartid);
-                        ref.add(new Product("Kitkat",10));
+                        ref.add(new Product("https://d2td6mzj4f4e1e.cloudfront.net/wp-content/uploads/sites/8/2010/09/22/oreo-introduces-price-marked-packs/Oreo-49p-PMP-2010.jpg","Kitkat"));
                         Intent i = new Intent(getApplicationContext(), cart.class);
                         startActivity(i);
                     }
