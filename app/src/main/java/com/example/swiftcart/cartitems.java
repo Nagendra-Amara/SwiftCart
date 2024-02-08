@@ -77,7 +77,7 @@ public class cartitems extends ArrayAdapter<DataModal>
                         }
                     }
                 });
-        //qnt.setText("Qnt :"+Integer.toString(itemqnt.get(dataModal.getName())));
+
         Picasso.get().load(dataModal.getImgUrl()).into(img);
 
         
