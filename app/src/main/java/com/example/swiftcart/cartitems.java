@@ -54,6 +54,7 @@ public class cartitems extends ArrayAdapter<DataModal>
         TextView itemname = listitemView.findViewById(R.id.itemname);
         ImageView img = listitemView.findViewById(R.id.img);
         TextView price = listitemView.findViewById(R.id.price);
+        TextView qnt = listitemView.findViewById(R.id.qnt);
 
 
 
