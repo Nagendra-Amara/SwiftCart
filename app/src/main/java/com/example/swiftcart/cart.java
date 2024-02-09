@@ -41,6 +41,8 @@ public class cart extends AppCompatActivity  {
     static Button total;
     String cartid;
     HashMap<String,String> prices;
+    HashMap<String,Integer> qnty;
+    int items_in_firebase;
     Button qr;
 
 
@@ -57,9 +59,9 @@ public class cart extends AppCompatActivity  {
         total = findViewById(R.id.total);
         cartlistitems = findViewById(R.id.cartlistitems);
         db = FirebaseFirestore.getInstance();
-        dataModalArrayList = new ArrayList<>();
         qr = findViewById(R.id.qr);
-
+        items_in_firebase = 0;
+        qnty = new HashMap<>();
 
 
         qr.setOnClickListener(new View.OnClickListener() {
@@ -83,20 +85,18 @@ public class cart extends AppCompatActivity  {
 
     private void refresh(int ms){
         final Handler handler = new Handler();
-//        final Runnable runnable = new Runnable() {
-//            @Override
-//            public void run() {
-//                context();
-//            }
-//        };
+
         final Runnable runnable = () -> context();
-//        final Runnable runnable = this::context;
+
         handler.postDelayed(runnable,ms);
     }
 
     private void loadcartitems()
     {
         dataModalArrayList = new ArrayList<>();
+        items_in_firebase = 0;
+        qnty.clear();
+
 
         db.collection(dashboard.getCartId()).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -106,12 +106,14 @@ public class cart extends AppCompatActivity  {
                             List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
                             for (DocumentSnapshot d : list) {
                                 DataModal dataModal = d.toObject(DataModal.class);
-                                dataModalArrayList.add(dataModal);
-
+                                items_in_firebase ++;
+                                if(!qnty.containsKey(dataModal.getName()))
+                                    dataModalArrayList.add(dataModal);
+                                qnty.put(dataModal.getName(),qnty.getOrDefault(dataModal.getName(),0)+1);
                             }
 
-                            adapter = new cartitems(cart.this, dataModalArrayList);
-                            size = dataModalArrayList.size();
+                            adapter = new cartitems(cart.this, dataModalArrayList,qnty);
+                            size = items_in_firebase;
                             if (size == 0) {
                                 cartlistitems.setAdapter(adapter);
                                 String temp1 = Integer.toString(calculateTotal(dataModalArrayList));
@@ -141,7 +143,7 @@ public class cart extends AppCompatActivity  {
         for(DataModal dataModal:dataModalArrayList)
         {
             if(prices.containsKey(dataModal.getName()) && prices.get(dataModal.getName()) != null)
-                totalPrice += Integer.parseInt(prices.get(dataModal.getName()));
+                totalPrice += Integer.parseInt(prices.get(dataModal.getName())) * qnty.get(dataModal.getName());
         }
         return totalPrice;
     }
@@ -151,5 +153,12 @@ public class cart extends AppCompatActivity  {
         return total.getText().toString();
     }
 
+    public HashMap<String, Integer> getQnty() {
+        return qnty;
+    }
+
+    public void setQnty(HashMap<String, Integer> qnty) {
+        this.qnty = qnty;
+    }
 }
 

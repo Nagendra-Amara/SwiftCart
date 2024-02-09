@@ -30,12 +30,17 @@ public class cartitems extends ArrayAdapter<DataModal>
 
     FirebaseFirestore db;
     public static HashMap<String,String> prices = new HashMap<>();
-    HashMap<String,Integer> itemqnt = new HashMap<>();
+    HashMap<String,Integer> qnty;
 
 
-    public cartitems(@NonNull Context context, ArrayList<DataModal> dataModalArrayList) {
+
+    public cartitems(@NonNull Context context, ArrayList<DataModal> dataModalArrayList,HashMap<String,Integer> qnty) {
         super(context, 0, dataModalArrayList);
+        this.qnty = qnty;
+
     }
+
+
 
     @NonNull
     @Override
@@ -54,10 +59,10 @@ public class cartitems extends ArrayAdapter<DataModal>
         TextView itemname = listitemView.findViewById(R.id.itemname);
         ImageView img = listitemView.findViewById(R.id.img);
         TextView price = listitemView.findViewById(R.id.price);
+        TextView qnt = listitemView.findViewById(R.id.qnt);
 
 
-
-
+        assert dataModal != null;
         itemname.setText(dataModal.getName());
 
         db = FirebaseFirestore.getInstance();
@@ -71,12 +76,13 @@ public class cartitems extends ArrayAdapter<DataModal>
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Map<String,Object> map= document.getData();
                                 price.setText((String)map.get("price"));
-                                itemqnt.put(dataModal.getName(),itemqnt.getOrDefault(dataModal.getName(),0)+1);
                                 prices.put(dataModal.getName(),(String)price.getText());
                             }
                         }
                     }
                 });
+        if(qnty.containsKey(dataModal.getName()) && qnty.get(dataModal.getName()) != null)
+            qnt.setText("Qnty:   " + qnty.get(dataModal.getName()));
 
         Picasso.get().load(dataModal.getImgUrl()).into(img);
 
