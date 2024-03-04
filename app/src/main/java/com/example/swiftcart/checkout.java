@@ -5,9 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -28,6 +35,26 @@ public class checkout extends AppCompatActivity {
 
         //getting text from input text field.
         String myText = cart.getTotal();
+        String cartId = dashboard.getCartId();
+
+        DatabaseReference dbref= FirebaseDatabase.getInstance().getReference().child("customers");
+        // we are use add listerner
+        // for event listener method
+        // which is called with query.
+        String time;
+        Query query=dbref.child(cartId);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // remove the value at reference
+                dataSnapshot.getRef().removeValue();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         //initializing MultiFormatWriter for QR code
         MultiFormatWriter mWriter = new MultiFormatWriter();
         try {

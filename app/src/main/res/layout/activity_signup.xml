@@ -12,7 +12,7 @@
         android:id="@+id/swiftcart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SwiftCart"
+        android:text="@string/app_name"
         android:textSize="35dp"
         android:textColor="@color/design_default_color_primary_variant"
         app:layout_constraintBottom_toTopOf="@+id/email"
