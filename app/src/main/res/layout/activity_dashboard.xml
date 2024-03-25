@@ -7,12 +7,12 @@
     tools:context=".MainActivity">
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="644dp"
+        android:layout_height="948dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="0dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="287dp"
         android:scrollbars="vertical">
 
         <LinearLayout
@@ -53,9 +53,9 @@
                     android:layout_height="wrap_content"
                     android:layout_row="0"
                     android:layout_column="1"
-                    android:text="Add cart"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"/>
+                    android:layout_marginRight="10dp"
+                    android:text="Add cart" />
 
                 <Button
                     android:id="@+id/logout"
@@ -63,10 +63,10 @@
                     android:layout_height="wrap_content"
                     android:layout_row="0"
                     android:layout_column="2"
-                    android:text="logout"
-                    android:textSize="15dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"/>
+                    android:layout_marginRight="10dp"
+                    android:text="logout"
+                    android:textSize="15dp" />
 
                 <Button
                     android:id="@+id/start"
@@ -74,19 +74,35 @@
                     android:layout_height="match_parent"
                     android:layout_row="0"
                     android:layout_column="0"
-                    android:text="Start"
-                    android:textSize="15dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"/>
+                    android:layout_marginRight="10dp"
+                    android:text="Start"
+                    android:textSize="15dp" />
             </GridLayout>
+
 
             <GridView
                 android:id="@+id/idGVCourses"
                 android:layout_width="fill_parent"
-                android:layout_height="750dp"
+                android:layout_height="670dp"
                 android:numColumns="2" />
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:drawableTop="@drawable/profile"
+                android:text="profile"
+                android:textSize="30dp" />
         </LinearLayout>
 
 
