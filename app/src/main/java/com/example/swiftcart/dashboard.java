@@ -120,6 +120,8 @@ public class dashboard extends AppCompatActivity {
                 builder.setPositiveButton("Ok", (DialogInterface.OnClickListener) (dialog, which) -> {
                     startActivity(new Intent(getApplicationContext(),dashboard.class));
                 });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }
         });
 

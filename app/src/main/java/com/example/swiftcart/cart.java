@@ -1,5 +1,6 @@
 package com.example.swiftcart;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -11,6 +12,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -67,8 +69,19 @@ public class cart extends AppCompatActivity  {
         qr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),checkout.class);
-                startActivity(i);
+                AlertDialog.Builder builder = new AlertDialog.Builder(cart.this);
+                builder.setCancelable(false);
+                builder.setMessage("are you sure to checkout !!!");
+                builder.setTitle("Ohh Ohhh !");
+                builder.setNegativeButton("No", (DialogInterface.OnClickListener) (dialog, which) -> {
+                    finish();
+                });
+                builder.setPositiveButton("Yes", (DialogInterface.OnClickListener) (dialog, which) -> {
+                    startActivity(new Intent(getApplicationContext(),checkout.class));
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
             }
         });
 
