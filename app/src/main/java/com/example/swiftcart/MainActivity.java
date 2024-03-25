@@ -1,10 +1,18 @@
 package com.example.swiftcart;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     FirebaseAuth mAuth;
+    String email1,password1;
     @Override
     public void onStart() {
         super.onStart();
@@ -48,12 +57,21 @@ public class MainActivity extends AppCompatActivity {
         TextView password = (TextView) findViewById(R.id.password);
         TextView logintosignup = findViewById(R.id.logintosignup);
         ProgressBar progressBar = findViewById(R.id.progressBar);
+        TextView forgot_password = findViewById(R.id.forgotpassword);
+        String text = (String) forgot_password.getText();
+        SpannableString spannableString = new SpannableString(text);
+        spannableString.setSpan(new UnderlineSpan(), 0, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new ForegroundColorSpan(Color.RED), 0, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        forgot_password.setText(spannableString);
+        forgot_password.setVisibility(View.VISIBLE);
+
+
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
-                String email1,password1;
+
                 email1 = String.valueOf(email.getText());
                 password1 = String.valueOf(password.getText());
                 mAuth.signInWithEmailAndPassword(email1, password1)
@@ -61,17 +79,15 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
+
                                     progressBar.setVisibility(View.GONE);
                                     Intent i = new Intent(getApplicationContext(),dashboard.class);
                                     startActivity(i);
-                                    Toast.makeText(MainActivity.this, "Login Success",
-                                            Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MainActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Intent i = new Intent(getApplicationContext(),signup.class);
                                     startActivity(i);
-                                    Toast.makeText(MainActivity.this, "signup before login",
-                                            Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MainActivity.this, "signup before login", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -81,9 +97,16 @@ public class MainActivity extends AppCompatActivity {
         logintosignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),signup.class);
-                startActivity(i);
+                startActivity(new Intent(getApplicationContext(),signup.class));
             }
         });
+
+        forgot_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),Forgot_Password.class));
+            }
+        });
+
     }
 }

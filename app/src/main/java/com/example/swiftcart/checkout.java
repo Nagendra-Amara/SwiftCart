@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,14 +38,14 @@ public class checkout extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
         ImageView qr = findViewById(R.id.qr);
-
+        Button exit = findViewById(R.id.exit);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         if(getSupportActionBar() != null)getSupportActionBar().hide();
 
 
         
-        String myText = cart.getTotal();
+        String myText = dashboard.getCartId()+"&"+cart.getTotal();
         String cartId = dashboard.getCartId();
 
         DatabaseReference dbref= FirebaseDatabase.getInstance().getReference().child("customers");
@@ -62,33 +64,51 @@ public class checkout extends AppCompatActivity {
             }
         });
 
-        db.collection(cartId).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                        if (task.isSuccessful()) {
-                            WriteBatch batch = db.batch();
-                            QuerySnapshot querySnapshot = task.getResult();
-                            for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                                batch.delete(document.getReference());
-                            }
-                            batch.commit()
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
+                        dataSnapshot.getRef().removeValue();
+                    }
 
-                                            } else {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                            }
-                                        }
-                                    });
-                        } else {
-
-                        }
                     }
                 });
+                db.collection(cartId).get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                                if (task.isSuccessful()) {
+                                    WriteBatch batch = db.batch();
+                                    QuerySnapshot querySnapshot = task.getResult();
+                                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                                        batch.delete(document.getReference());
+                                    }
+                                    batch.commit()
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+
+                                                    } else {
+
+                                                    }
+                                                }
+                                            });
+                                }
+                            }
+                        });
+
+                startActivity(new Intent(getApplicationContext(), dashboard.class));
+            }
+        });
 
 
 
@@ -112,7 +132,9 @@ public class checkout extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent i = new Intent(this,dashboard.class);
+
+        super.onBackPressed();
+        Intent i = new Intent(this, dashboard.class);
         startActivity(i);
     }
 }

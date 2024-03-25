@@ -1,6 +1,7 @@
 package com.example.swiftcart;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,8 +59,9 @@ public class cartitems extends ArrayAdapter<DataModal>
 
         TextView itemname = listitemView.findViewById(R.id.itemname);
         ImageView img = listitemView.findViewById(R.id.img);
-        TextView price = listitemView.findViewById(R.id.price);
+        TextView org_price = listitemView.findViewById(R.id.org_price);
         TextView qnt = listitemView.findViewById(R.id.qnt);
+        TextView dis_price = listitemView.findViewById(R.id.dist_price);
 
 
         assert dataModal != null;
@@ -75,8 +77,10 @@ public class cartitems extends ArrayAdapter<DataModal>
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Map<String,Object> map= document.getData();
-                                price.setText((String)map.get("price"));
-                                prices.put(dataModal.getName(),(String)price.getText());
+                                org_price.setText((String)map.get("price"));
+                                dis_price.setText((String)map.get("discount_price"));
+                                prices.put(dataModal.getName(),(String)dis_price.getText());
+                                org_price.setPaintFlags(org_price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                             }
                         }
                     }

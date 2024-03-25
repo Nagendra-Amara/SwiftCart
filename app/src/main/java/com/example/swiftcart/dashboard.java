@@ -11,8 +11,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.activity.result.ActivityResultLauncher;
+
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -36,7 +40,7 @@ public class dashboard extends AppCompatActivity {
     boolean status = true;
     FirebaseDatabase database;
     DatabaseReference myRef;
-
+    Boolean flag;
 
 
     @Override
@@ -49,7 +53,7 @@ public class dashboard extends AppCompatActivity {
         //gets instance of firebase
         database = FirebaseDatabase.getInstance();
         
-
+        flag = false;
 
 
         TextView cart = findViewById(R.id.cart);
@@ -64,6 +68,7 @@ public class dashboard extends AppCompatActivity {
 
 
         db = FirebaseFirestore.getInstance();
+
 
 
         loadDatainGridView();
@@ -87,8 +92,6 @@ public class dashboard extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Map<String,Object> map= document.getData();
                                 StringBuilder name = new StringBuilder("Hi ," + map.get("name"));
-                                for(int i=name.length();i<25;i++)
-                                    name.append(" ");
                                 greetings.setText(name.toString());
                             }
                         }
@@ -106,8 +109,18 @@ public class dashboard extends AppCompatActivity {
 
 
         cart.setOnClickListener(view -> {
-            Intent i = new Intent(getApplicationContext(),cart.class);
-            startActivity(i);
+            if(flag){
+                startActivity(new Intent(getApplicationContext(),cart.class));
+            }
+            else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(dashboard.this);
+                builder.setCancelable(false);
+                builder.setMessage("Please Register the Cart First !!!");
+                builder.setTitle("Awwwwwww !");
+                builder.setPositiveButton("Ok", (DialogInterface.OnClickListener) (dialog, which) -> {
+                    startActivity(new Intent(getApplicationContext(),dashboard.class));
+                });
+            }
         });
 
        start.setOnClickListener(view -> scanCode());
@@ -126,6 +139,7 @@ public class dashboard extends AppCompatActivity {
     ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(),result->{
         if(result.getContents() != null)
         {
+            flag = true;
             cartid = result.getContents();
             myRef = database.getReference("customers");
 

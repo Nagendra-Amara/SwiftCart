@@ -9,6 +9,10 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp"
         android:scrollbars="vertical">
 
         <LinearLayout
@@ -18,14 +22,14 @@
             android:orientation="vertical">
 
 
-            <GridLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/greetings"
-                    android:layout_width="wrap_content"
+                    android:layout_width="300dp"
                     android:layout_height="48dp"
                     android:textSize="25dp" />
 
@@ -33,19 +37,14 @@
                     android:id="@+id/cart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_row="0"
-                    android:layout_column="2"
                     android:drawableRight="@drawable/cart"
-                    android:text="  "
                     android:textSize="40dp" />
-
-            </GridLayout>
+            </LinearLayout>
 
 
             <GridLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp">
+                android:layout_height="wrap_content">
 
 
                 <Button
@@ -54,7 +53,9 @@
                     android:layout_height="wrap_content"
                     android:layout_row="0"
                     android:layout_column="1"
-                    android:text="Add cart" />
+                    android:text="Add cart"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"/>
 
                 <Button
                     android:id="@+id/logout"
@@ -63,7 +64,9 @@
                     android:layout_row="0"
                     android:layout_column="2"
                     android:text="logout"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"/>
 
                 <Button
                     android:id="@+id/start"
@@ -72,7 +75,9 @@
                     android:layout_row="0"
                     android:layout_column="0"
                     android:text="Start"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"/>
             </GridLayout>
 
             <GridView
@@ -80,7 +85,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="750dp"
                 android:numColumns="2" />
-
 
 
         </LinearLayout>
