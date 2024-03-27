@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".checkout">
+    tools:context=".checkout"
+    android:background="#eeeeee">
 
     <ImageView
         android:id="@+id/qr"
@@ -14,8 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.279"
-        app:srcCompat="@android:drawable/alert_light_frame" />
+        app:layout_constraintVertical_bias="0.124" />
 
     <Button
         android:id="@+id/exit"
@@ -27,4 +27,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.852" />
+
+    <ImageView
+        android:id="@+id/sample_image"
+        android:layout_width="363dp"
+        android:layout_height="234dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.634"
+        app:srcCompat="@drawable/bg_img" />
 </androidx.constraintlayout.widget.ConstraintLayout>

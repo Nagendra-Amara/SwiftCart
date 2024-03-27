@@ -4,15 +4,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="#eeeeee">
 
     <ScrollView
         android:layout_width="644dp"
         android:layout_height="948dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="2dp"
-        android:layout_marginBottom="287dp"
+        android:layout_marginEnd="-11dp"
+        android:layout_marginBottom="16dp"
         android:scrollbars="vertical">
 
         <LinearLayout
@@ -39,6 +40,7 @@
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/cart"
                     android:textSize="40dp" />
+
             </LinearLayout>
 
 
@@ -83,28 +85,12 @@
 
             <GridView
                 android:id="@+id/idGVCourses"
-                android:layout_width="fill_parent"
-                android:layout_height="670dp"
+                android:layout_width="match_parent"
+                android:layout_height="750dp"
                 android:numColumns="2" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
 
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/profile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:drawableTop="@drawable/profile"
-                android:text="profile"
-                android:textSize="30dp" />
         </LinearLayout>
-
 
     </ScrollView>
 

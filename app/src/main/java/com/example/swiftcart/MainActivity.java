@@ -85,9 +85,16 @@ public class MainActivity extends AppCompatActivity {
                                     startActivity(i);
                                     Toast.makeText(MainActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Intent i = new Intent(getApplicationContext(),signup.class);
-                                    startActivity(i);
-                                    Toast.makeText(MainActivity.this, "signup before login", Toast.LENGTH_SHORT).show();
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                    builder.setCancelable(false);
+                                    builder.setMessage("Please Enter Vaild Registed Email and Password !!!");
+                                    builder.setTitle("ohh ohhh !");
+                                    builder.setNegativeButton("Ok", (DialogInterface.OnClickListener) (dialog, which) -> {
+                                        dialog.cancel();
+                                    });
+                                    AlertDialog alertDialog = builder.create();
+                                    alertDialog.show();
+                                    progressBar.setVisibility(View.INVISIBLE);
                                 }
                             }
                         });

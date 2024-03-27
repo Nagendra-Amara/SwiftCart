@@ -30,6 +30,9 @@ public class Forgot_Password extends AppCompatActivity {
         Button forgot = findViewById(R.id.forgot);
         TextView mail = findViewById(R.id.email);
 
+
+        if(getSupportActionBar() != null)
+            getSupportActionBar().hide();
         forgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

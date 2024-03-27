@@ -16,15 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Material3.Light"
         tools:targetApi="31">
-        <activity
-            android:name=".profile"
-            android:exported="false" />
+
         <activity
             android:name=".Forgot_Password"
             android:exported="false" />
-        <activity
-            android:name=".forgot_password"
-            android:exported="false" />
+
         <activity
             android:name=".index"
             android:exported="true">
