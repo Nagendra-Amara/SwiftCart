@@ -20,6 +20,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -35,12 +36,13 @@ public class dashboard extends AppCompatActivity {
     GridView coursesGV;
     ArrayList<DataModal> dataModalArrayList;
     FirebaseFirestore db;
-    TextView greetings;
+    TextView greetings,profile;
     FirebaseUser user;
     boolean status = true;
     FirebaseDatabase database;
     DatabaseReference myRef;
     Boolean flag;
+    FirebaseAuth mAuth;
 
 
     @Override
@@ -57,11 +59,11 @@ public class dashboard extends AppCompatActivity {
 
 
         TextView cart = findViewById(R.id.cart);
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         Button logout = findViewById(R.id.logout);
         user = mAuth.getCurrentUser();
         Button start = findViewById(R.id.start);
-        //Button extracart = findViewById(R.id.extracart);
+        profile = findViewById(R.id.profile);
         greetings = findViewById(R.id.greetings);
         coursesGV = findViewById(R.id.idGVCourses);
         dataModalArrayList = new ArrayList<>();
@@ -101,12 +103,14 @@ public class dashboard extends AppCompatActivity {
 
 
         logout.setOnClickListener(view -> {
-            FirebaseAuth.getInstance().signOut();
-            Intent i = new Intent(getApplicationContext(),MainActivity.class);
-            startActivity(i);
+            mAuth.signOut();
+            startActivity(new Intent(getApplicationContext(),MainActivity.class));
         });
 
 
+        profile.setOnClickListener(view ->{
+            startActivity(new Intent(getApplicationContext(),Profile.class));
+        });
 
         cart.setOnClickListener(view -> {
             if(flag){
@@ -155,8 +159,7 @@ public class dashboard extends AppCompatActivity {
                         myRef.setValue(email);
                         CollectionReference ref = db.collection(cartid);
                         ref.add(new Product("https://d2td6mzj4f4e1e.cloudfront.net/wp-content/uploads/sites/8/2010/09/22/oreo-introduces-price-marked-packs/Oreo-49p-PMP-2010.jpg","Kitkat"));
-                        Intent i = new Intent(getApplicationContext(), cart.class);
-                        startActivity(i);
+                        startActivity(new Intent(getApplicationContext(), cart.class));
                     }
                 }
 

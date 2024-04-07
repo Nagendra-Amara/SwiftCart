@@ -31,7 +31,7 @@
                 <TextView
                     android:id="@+id/greetings"
                     android:layout_width="300dp"
-                    android:layout_height="48dp"
+                    android:layout_height="50dp"
                     android:textSize="25dp" />
 
                 <TextView
@@ -39,7 +39,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/cart"
+
                     android:textSize="40dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/profile"
+                    android:id="@+id/profile"
+                    android:layout_gravity="center"/>
 
             </LinearLayout>
 
@@ -67,6 +75,7 @@
                     android:layout_column="2"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    android:drawableRight="@drawable/logout"
                     android:text="logout"
                     android:textSize="15dp" />
 
